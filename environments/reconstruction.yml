@@ -1,0 +1,31 @@
+# FRAME reconstruction and CUDA gating extraction environment.
+# Curated from the user's working 2026-10-28 export; NOT a byte-for-byte lockfile.
+# Linux + NVIDIA GPU expected. tinycudann is a separate source build (see README).
+name: frame-reconstruction
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10.19
+  - pip
+  - pytorch=1.13.1
+  - torchvision=0.14.1
+  - pytorch-cuda=11.7
+  # A CUDA compiler is needed to build the tiny-cuda-nn PyTorch bindings.
+  - cuda-toolkit=11.7.1
+  - pip:
+      - numpy==1.26.4
+      - nibabel==5.3.3
+      - pandas==2.3.3
+      - scipy==1.15.3
+      - scikit-image==0.25.2
+      - SimpleITK==2.5.3
+      - tqdm==4.67.3
+      - pillow==12.2.0
+      - ninja==1.13.0
+      - cmake==4.2.1
+# Do not add torch, torchvision, or NVIDIA cu12 runtime packages to pip above.
+# Do not install the unrelated upstream nesvor package: use this repository's source.
+# tinycudann is intentionally NOT installed as a plain pip pin; build it for this CUDA/PyTorch/GPU.

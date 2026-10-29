@@ -1,0 +1,28 @@
+# FRAME optional analysis, plotting, and reference-based quality evaluation.
+# Curated from the user's working 2026-10-28 export; NOT a byte-for-byte lockfile.
+# PyTorch/CUDA via Conda, pip only for higher-level analysis packages.
+name: frame-analysis
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9.23
+  - pip
+  - pytorch=2.5.1
+  - torchvision=0.20.1
+  - pytorch-cuda=12.1
+  - pip:
+      - numpy==2.0.2
+      - pandas==2.3.3
+      - scipy==1.13.1
+      - matplotlib==3.9.4
+      - nibabel==5.3.3
+      - scikit-image==0.24.0
+      - lpips==0.1.4
+      - piq==0.8.0
+      - torchmetrics==1.8.2
+      - tqdm==4.67.1
+# Evaluation uses pretrained LPIPS AlexNet weights: initial network download may be needed.
+# tinycudann is NOT needed by analysis/evaluation; GPU gating extraction runs in reconstruction.

@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# Python environments
+.venv/
+venv/
+.env
+.env.*
+.conda/
+
+# Local environment snapshots
+conda-explicit.txt
+pip-freeze.txt
+
+# MRI data and checkpoints
+*.nii
+*.nii.gz
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Experiment outputs
+logs/
+outputs/
+checkpoints/
+wandb/
+tensorboard/
+*.lock
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+/environment-review/
+
+# Additional research data and intermediate arrays
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.dcm
+*.mha
+*.nrrd
+*.pkl
+*.pickle
+
+# Local analysis results
+.ipynb_checkpoints/
+
+# Compiled native and CUDA extensions
+*.so
+*.so.*
