@@ -38,11 +38,11 @@
 
 **실제 실행 환경 증빙**
 
-- 증빙 화면 A: Docker 컨테이너 내부 FRAME 학습 환경 — Python, PyTorch, CUDA 및 GPU 인식 결과
+- 증빙 화면 A: Docker 컨테이너 내부 FRAME 학습 환경 — Python 3.10.19, PyTorch 1.13.1+cu117, CUDA 11.7 환경에서 NVIDIA GeForce RTX 3090 GPU를 정상적으로 인식
 - <img width="338" height="88" alt="training_evi" src="https://github.com/user-attachments/assets/41bf405f-0f1c-4566-8a2f-69a2fa1ff8a6" />
-- 증빙 화면 B: Docker 컨테이너 내부 분석 환경 — Python, PyTorch, CUDA 및 주요 분석 라이브러리 버전
+- 증빙 화면 B: Docker 컨테이너 내부 분석 환경 — Python 3.9.23, PyTorch 2.5.1+cu121, CUDA 12.1 환경에서 NumPy, Pandas, SciPy, Matplotlib 등 분석 라이브러리와 NVIDIA GPU를 정상적으로 인식
 - <img width="338" height="155" alt="analysis_evi" src="https://github.com/user-attachments/assets/84d7e09b-1cbe-4b63-b6eb-8257a1a6e8e8" />
-- 증빙 화면 C: Docker 호스트의 실행 중인 컨테이너 정보 — 확보 가능한 경우 별도 첨부
+- 증빙 화면 C: Docker 호스트의 실행 중인 컨테이너 정보 — Linux 서버에서 ddualab 이미지 기반의 dongnyeok Docker 컨테이너가 실행 중임을 확인
 - <img width="925" height="59" alt="docker_containter" src="https://github.com/user-attachments/assets/9d4447b5-d568-456e-9e92-a690b880fc1a" />
 
 
