@@ -1,10 +1,91 @@
 # FRAME
 
+> **테크니컬 포트폴리오 재심사 — 심사 항목별 증빙**
+>
+> 심사 대상: 1번 Python 데이터 처리 · 2번 Linux/Docker 연구 환경 · 7번 공개 머신러닝 결과물
+>
+> 본 저장소는 3차원 뇌 MRI 영상 복원을 위한 딥러닝 연구 프로젝트 FRAME의 구현 결과물입니다. 아래에서는 선택한 각 심사 항목에 대해 수행한 작업, 실제 구현 위치, 코드에서 확인할 사항, 검증 결과를 구분하여 제시합니다.
+
+## 심사 항목 1. Python 등 데이터 처리 언어 활용 능력
+
+**평가 기준:** Python 등의 프로그래밍 언어를 사용하여 데이터를 처리하고 분석하는 능력
+
+**수행 내용:** Python을 이용하여 MRI 전처리 파이프라인, 딥러닝 모델의 핵심 구성 요소, 주파수 영역 손실 함수 및 영상 품질 평가 코드를 구현하였습니다.
+
+| 구현 기능 | 실제 코드 위치 | 확인 방법 |
+|---|---|---|
+| MRI 열화 시뮬레이션 | [brats_pre4.py — 9~37행](preprocessing/brats_pre4.py#L9-L37) | `degrade_mri_volume()`에서 Gaussian blur, 다운샘플링, 슬라이스 강도 변동 구현 확인 |
+| FFT 기반 손실 함수 | [losses.py — 24~102행](nesvor/inr/losses.py#L24-L102) | `FocalFrequencyLoss` 클래스와 `torch.fft.fft2()` 연산 확인 |
+| 공간 적응형 Gating | [models.py — 137~236행](nesvor/inr/models.py#L137-L236) | `GatingMLP`에서 입력 특징을 이용한 수준별 Gating 가중치 예측 확인 |
+| 영상 품질 지표 | [frame_metrics.py — 123~369행](evaluation/frame_metrics.py#L123-L369) | PSNR, SSIM, NRMSE, LPIPS, FSIM, HFEN 계산 함수 확인 |
+
+단순히 라이브러리를 사용한 것이 아니라, MRI 데이터 처리 과정과 딥러닝 모델의 구성 요소, 손실 함수 및 정량 평가 기능을 Python 코드로 직접 구현하였음을 확인하실 수 있습니다.
+
+---
+
+## 심사 항목 2. Linux·Docker 기반 연구 및 데이터 분석 환경 구축 능력
+
+**평가 기준:** Linux, Docker 및 가상환경 등을 이용한 데이터 분석·연구 환경 구축 능력
+
+**수행 내용:** Linux 기반 NVIDIA GPU 서버에서 Docker 및 Conda를 활용하여 FRAME 연구 환경을 운영하였으며, CUDA·PyTorch 버전의 차이에 따른 의존성 충돌을 방지하기 위해 학습 환경과 분석 환경을 분리하였습니다.
+
+| 환경 구성 | 실제 증빙 위치 | 확인 방법 |
+|---|---|---|
+| MRI 복원·학습 환경 | [reconstruction.yml](environments/reconstruction.yml) | Python 3.10, PyTorch 1.13.1, CUDA 11.7 설정 확인 |
+| 분석·정량 평가 환경 | [analysis.yml](environments/analysis.yml) | Python 3.9, PyTorch 2.5.1, CUDA 12.1 설정 확인 |
+| 패키지 의존성 관리 | [environments/README.md](environments/README.md) | 환경별 역할, 설치 절차와 CUDA 호환성 설명 확인 |
+| 학습 환경 실행 코드 | [run_frame_volume.py](scripts/run_frame_volume.py) | GPU 기반 복원 실행 명령 구성 확인 |
+
+**실제 실행 환경 증빙**
+
+- 증빙 화면 A: Docker 컨테이너 내부 FRAME 학습 환경 — Python, PyTorch, CUDA 및 GPU 인식 결과
+- 증빙 화면 B: Docker 컨테이너 내부 분석 환경 — Python, PyTorch, CUDA 및 주요 분석 라이브러리 버전
+- 증빙 화면 C: Docker 호스트의 실행 중인 컨테이너 정보 — 확보 가능한 경우 별도 첨부
+
+서로 다른 딥러닝·분석 환경의 의존성을 분리하여 관리하고, 실제 GPU 서버에서 해당 환경들을 사용하였음을 확인할 수 있습니다.
+
+**증빙 범위:** 공개된 YAML 파일은 기존 실험 환경을 바탕으로 정리한 설치 구성안입니다.
+
+---
+
+## 심사 항목 7. 머신러닝 라이브러리를 이용한 재현 가능한 개발 결과물 공개
+
+**평가 기준:** 머신러닝 라이브러리를 활용한 개발 결과물을 구현하고, 타인이 확인할 수 있도록 공개하는 능력
+
+**수행 내용:** PyTorch 기반 NeSVoR의 MRI 복원 구조를 확장하여 FRAME을 개발하였으며, Multi-resolution Hash Grid Encoding에 Focal Frequency Loss 및 Spatially Adaptive Gating을 결합하였습니다. 해당 모델의 구현과 학습·복원·평가 절차를 GitHub에 공개하였습니다.
+
+| 개발 결과물 | 실제 코드 위치 | 확인 방법 |
+|---|---|---|
+| FRAME 모델 및 Gating 구현 | [models.py — 239~554행](nesvor/inr/models.py#L239-L554) | `INR` 클래스에서 Hash Grid 특징에 공간 Gating을 적용하는 코드 확인 |
+| PyTorch 학습 코드 | [train.py — 22행부터](nesvor/inr/train.py#L22-L130) | `train()` 함수에서 최적화, 손실 함수 통합 및 Gating 파라미터 관리 확인 |
+| 복원 실행기 | [run_frame_volume.py — 28~114행](scripts/run_frame_volume.py#L28-L114) | 입력 MRI, 학습 인자, 출력 및 복원 명령 구성 확인 |
+| Gating 분석 | [analysis/gating/](analysis/gating/) | 학습된 가중치 추출 및 통계 분석 코드 확인 |
+| 자동 테스트 | [test_4mod.py](analysis/gating/test_4mod.py) | Gating 데이터 처리 및 분석에 관한 회귀 테스트 확인 |
+| 영상 품질 평가 | [evaluate_frame_pair.py](evaluation/evaluate_frame_pair.py) | 실제 복원 결과와 기준 MRI 간 정량 평가 실행 코드 확인 |
+| 환경 구성 및 실행 안내 | [environments/](environments/) 및 README의 실행 방법 | 설치 구성, 복원 및 평가 실행 명령 확인 |
+
+**실제로 수행한 검증**
+
+| 검증 항목 | 확인된 결과 |
+|---|---|
+| Gating 분석 자동 테스트 | 15개 테스트 통과 |
+| GPU 체크포인트 사전 검증 | 실제 FRAME 체크포인트 로딩 및 Gating 가중치 조회 성공 |
+| 정량 평가 실행 | 실제 MRI 한 쌍에 대한 평가 및 CSV·JSON 결과 저장 성공 |
+| 전체 48명 실험의 신규 환경 재현 | 아직 미검증 |
+
+머신러닝 모델의 핵심 구현부터 실행 인터페이스, 정량 평가 및 자동 테스트까지 공개되어 있어, 개발 결과물의 구조와 검증 절차를 직접 확인할 수 있습니다.
+
+---
+
+## FRAME 연구 내용 및 실험 결과
+
+아래부터는 연구 배경, FRAME의 세부 알고리즘, 논문에 보고된 실험 결과, 설치 및 실행 방법을 설명합니다.
+
 **Frequency-Regulated Adaptive Multi-resolution Encoding for Implicit Neural MRI Slice-to-Volume Reconstruction**
 
 FRAME is a **volume-specific implicit neural representation (INR)** framework for reconstructing three-dimensional MRI from sparsely sampled, anisotropic slice observations. It combines a point-spread-function (PSF) observation model, **patch-based Focal Frequency Loss**, and **spatially adaptive gating of multi-resolution hash-grid features**.
 
-> **Project status:** Research-code release preparation. The original experiments were run in an existing Linux/Docker/NVIDIA GPU environment. The provided public-facing commands have passed the checks listed below, but fresh Conda environment creation and a full end-to-end training rerun have **not** yet been validated.
+> **Project status:** Public research-code release. The original experiments were run in an existing Linux/Docker/NVIDIA GPU environment. The provided public-facing commands have passed the checks listed below, but fresh Conda environment creation and a full end-to-end training rerun have **not** yet been validated.
 
 ## Overview
 
@@ -103,7 +184,7 @@ python scripts/run_frame_volume.py \
 
 The wrapper writes the reconstructed volume (`.nii.gz`) and a volume-specific model checkpoint (`.pt`). It refuses to overwrite existing outputs. Its current defaults follow the local research runner, including **2,000 iterations**, **4,096 observed pixels per batch**, **48×48 patches**, **up to 8 patches**, FF Loss weight **0.0125**, exponent **2**, seed **42**, and gating learning-rate scale **1.0**.
 
-**Reproduction boundary:** The manuscript specifies **256 Monte Carlo PSF samples per pixel**. The current lightweight wrapper does not explicitly pass `--n-samples`; verify the effective underlying NeSVoR CLI default or add an explicit matching argument **before claiming exact reproduction** of the manuscript configuration. Other research-runner options and input conventions should likewise be checked for new datasets.
+**Reproduction boundary:** The manuscript specifies **256 Monte Carlo PSF samples per pixel**, and the current wrapper explicitly passes `--n-samples 256`. The other historical runner settings and the full 48-patient results still need end-to-end revalidation before claiming complete experimental reproduction.
 
 ## Prepare synthetic BraTS inputs (optional)
 
